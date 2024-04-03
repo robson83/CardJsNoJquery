@@ -1,0 +1,10 @@
+version: "2"
+services:
+ npm-gateway-js:
+   image: node:alpine
+   container_name: npm-gateway
+   volumes:
+    - ./:/var/www/html
+   working_dir: /var/www/html
+   profiles: ["npm"]
+   entrypoint: ['npm']

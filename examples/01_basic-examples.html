@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Example 01 - Basic Examples | CardJs</title>
+
+  <link href="../card-js.min.css" rel="stylesheet" type="text/css" />
+  <script src="../card-js.min.js"></script>
+
+</head>
+<body>
+
+  <!-- Basic -->
+  <div class="card-js"></div>
+
+
+  <!-- Add Name -->
+  <div style="margin-top: 50px">
+    <div id="card1" class="card-js" data-capture-name="true"></div>
+  </div>
+
+
+  <!-- Change Icon Color -->
+  <div style="margin-top: 50px">
+    <div id="card2" class="card-js" data-capture-name="true" data-icon-colour="#158CBA"></div>
+  </div>
+
+  <script>
+     document.addEventListener('DOMContentLoaded', function() {
+         new CardJs('#card1');
+         new CardJs('#card2');
+     });
+ </script>
+
+</body>
+</html>

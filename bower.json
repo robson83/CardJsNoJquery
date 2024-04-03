@@ -1,0 +1,27 @@
+{
+  "name": "card-js",
+  "authors": [
+  ],
+  "description": "Credit Card input form with validation without jQuery, based on CardJs project",
+  "main": "./card-js.min.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "Card JS",
+    "Credit Card Input",
+    "Credit Card Form",
+    "Credit Card Validation"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "1.11.1"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
