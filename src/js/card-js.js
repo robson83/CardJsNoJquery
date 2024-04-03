@@ -1,54 +1,55 @@
-CardJs.prototype.constructor = CardJs;
+class CardJs {
 
 
-/**
- * @class CardJs
- *
- * Based on the initial implementation of Colin Stannard
- * Modified to be not dependent of jQuery
- *
- * @param elem
- * @constructor
- */
+    /**
+     * @class CardJs
+     *
+     * Based on the initial implementation of Colin Stannard
+     * Modified to be not dependent of jQuery
+     *
+     * @param elem
+     * @constructor
+     */
+    constructor(elem) {
+        this.elem = document.querySelector(elem);
 
-function CardJs(elem) {
-    this.elem = document.querySelector(elem);
+        this.captureName = (this.elem.dataset.captureName == 'true');
+        this.iconColour = this.elem.dataset.iconColour || false;
+        this.stripe = this.elem.dataset.stripe || false;
 
-    this.captureName = (this.elem.dataset.captureName == 'true');
-    this.iconColour = this.elem.dataset.iconColour || false;
-    this.stripe = this.elem.dataset.stripe || false;
+        if (this.stripe) {
+            this.captureName = false;
+        }
 
-    if (this.stripe) {
-        this.captureName = false;
+        // Initialise
+        this.initCardNumberInput();
+        this.initNameInput();
+        this.initExpiryMonthInput();
+        this.initExpiryYearInput();
+        this.initCvcInput();
+
+
+        this.elem.innerHTML = '';
+
+
+        // Setup display
+        this.setupCardNumberInput();
+        this.setupNameInput();
+        this.setupExpiryInput();
+        this.setupCvcInput();
+
+
+        // Set icon colour
+        if (this.iconColour) {
+            this.setIconColour(this.iconColour);
+        }
+
+        // --- --- --- --- --- --- --- --- --- ---
+
+        this.refreshCreditCardTypeIcon();
+
+
     }
-
-    // Initialise
-    this.initCardNumberInput();
-    this.initNameInput();
-    this.initExpiryMonthInput();
-    this.initExpiryYearInput();
-    this.initCvcInput();
-
-
-    this.elem.innerHTML = '';
-
-
-    // Setup display
-    this.setupCardNumberInput();
-    this.setupNameInput();
-    this.setupExpiryInput();
-    this.setupCvcInput();
-
-
-    // Set icon colour
-    if (this.iconColour) {
-        this.setIconColour(this.iconColour);
-    }
-
-    // --- --- --- --- --- --- --- --- --- ---
-
-    this.refreshCreditCardTypeIcon();
-
 
 }
 
@@ -396,7 +397,7 @@ CardJs.applyFormatMask = function (string, mask) {
 CardJs.cardTypeFromNumber = function (number) {
 
     // Diners - Carte Blanche
-    re = new RegExp("^30[0-5]");
+    var re = new RegExp("^30[0-5]");
     if (number.match(re) != null)
         return "Diners - Carte Blanche";
 
@@ -985,13 +986,12 @@ CardJs.prototype.setCardTypeAsJcb = function () {
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-
 /**
  * Initialise the card number input
  */
 CardJs.prototype.initCardNumberInput = function () {
     // Find or create the card number input element
-    this.cardNumberInput = CardJs.detachOrCreateElement(this.elem, ".card-number", "<input class='card-number' />");
+    this.cardNumberInput = CardJs.detachOrCreateElement(this.elem, ".card-number", "<input data-field='pan' class='card-number' />");
 
     // Ensure the card number element has a name
     if (!this.cardNumberInput.hasAttribute("name")) {
@@ -1033,12 +1033,11 @@ CardJs.prototype.initCardNumberInput = function () {
  * Initialise the name input
  */
 CardJs.prototype.initNameInput = function () {
-
-
+    
     // Enable name input if a field has been created
     //this.captureName = this.elem.querySelector(".name") !== null;
 
-    this.nameInput = CardJs.detachOrCreateElement(this.elem, ".name", "<input class='name' />");
+    this.nameInput = CardJs.detachOrCreateElement(this.elem, ".name", "<input data-field='cardholder' class='name' />");
 
     // Ensure the name element has a field name
     if (!this.nameInput.hasAttribute("name")) {
@@ -1067,13 +1066,12 @@ CardJs.prototype.initExpiryYearInput = function () {
     this.expiryYearInput = CardJs.detachOrCreateElement(this.elem, ".expiry-year", "<input class='expiry-year' />");
 };
 
-
 /**
  * Initialise the card CVC input
  */
 CardJs.prototype.initCvcInput = function () {
 
-    this.cvcInput = CardJs.detachOrCreateElement(this.elem, ".cvc", "<input class='cvc' />");
+    this.cvcInput = CardJs.detachOrCreateElement(this.elem, ".cvc", "<input data-field='securitycode' class='cvc' />");
 
     // Ensure the CVC has a placeholder
     if (!this.cvcInput.hasAttribute("placeholder")) {
@@ -1203,7 +1201,7 @@ CardJs.prototype.setupExpiryInput = function () {
             this.expiryYearInput.setAttribute("type", "hidden");
         }
 
-        this.expiryMonthYearInput = CardJs.detachOrCreateElement(this.elem, ".expiry", "<input class='expiry' />");
+        this.expiryMonthYearInput = CardJs.detachOrCreateElement(this.elem, ".expiry", "<input data-field='expirationDate' class='expiry' />");
 
         if (!CardJs.elementHasAttribute(this.expiryMonthYearInput, "placeholder")) {
             this.expiryMonthYearInput.setAttribute("placeholder", CardJs.EXPIRY_PLACEHOLDER);
@@ -1331,11 +1329,11 @@ CardJs.prototype.setExpiryMonthAsInvalid = function () {
     }
 };
 
-CardJs.prototype.isValid = function () {    
-    
-    return CardJs.luhnCheck( CardJs.numbersOnlyString(this.cardNumberInput.value) ) &&
-           CardJs.isExpiryValid( this.getExpiryMonth(), this.getExpiryYear() ) &&
-           this.cvcInput.maxLength == CardJs.numbersOnlyString(this.cvcInput.value).length;
+CardJs.prototype.isValid = function () {
+
+    return CardJs.luhnCheck(CardJs.numbersOnlyString(this.cardNumberInput.value)) &&
+        CardJs.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear()) &&
+        this.cvcInput.maxLength == CardJs.numbersOnlyString(this.cvcInput.value).length;
 
 };
 
@@ -1434,3 +1432,7 @@ CardJs.luhnCheck = function (card) {
 
 
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = CardJs;
+}
