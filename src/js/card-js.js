@@ -734,9 +734,9 @@ CardJs.prototype.getCvc = function () {
  *
  * @param colour
  */
-CardJs.prototype.setIconColour = function(colour) {
+CardJs.prototype.setIconColour = function (colour) {
     const icons = this.elem.querySelectorAll(".icon .svg");
-    icons.forEach(function(icon) {
+    icons.forEach(function (icon) {
         icon.style.fill = colour;
     });
 };
@@ -854,15 +854,19 @@ CardJs.prototype.clearCardTypeIcon = function () {
     }
 };
 
+
+CardJs.prototype.setCardTypeIcon = function (card) {
+    const cardTypeIcon = this.elem.querySelector(".card-number-wrapper .card-type-icon");
+    if (cardTypeIcon) {
+        cardTypeIcon.className = "card-type-icon show " + card;
+    }
+}
+
 /**
  * Set the card type icon as - Visa
  */
 CardJs.prototype.setCardTypeIconAsVisa = function () {
-
-    const cardTypeIcon = this.elem.querySelector(".card-number-wrapper .card-type-icon");
-    if (cardTypeIcon) {
-        cardTypeIcon.className = "card-type-icon show visa";
-    }
+    this.setCardTypeIcon("visa");
 };
 
 
@@ -870,11 +874,7 @@ CardJs.prototype.setCardTypeIconAsVisa = function () {
  * Set the card type icon as - Master Card
  */
 CardJs.prototype.setCardTypeIconAsMasterCard = function () {
-
-    const cardTypeIcon = this.elem.querySelector(".card-number-wrapper .card-type-icon");
-    if (cardTypeIcon) {
-        cardTypeIcon.className = "card-type-icon show master-card";
-    }
+    this.setCardTypeIcon("master-card");
 };
 
 
@@ -882,11 +882,7 @@ CardJs.prototype.setCardTypeIconAsMasterCard = function () {
  * Set the card type icon as - American Express (AMEX)
  */
 CardJs.prototype.setCardTypeIconAsAmericanExpress = function () {
-
-    const cardTypeIcon = this.elem.querySelector(".card-number-wrapper .card-type-icon");
-    if (cardTypeIcon) {
-        cardTypeIcon.className = "card-type-icon show american-express";
-    }
+    this.setCardTypeIcon("american-express");
 };
 
 
@@ -894,12 +890,7 @@ CardJs.prototype.setCardTypeIconAsAmericanExpress = function () {
  * Set the card type icon as - Discover
  */
 CardJs.prototype.setCardTypeIconAsDiscover = function () {
-
-    const cardTypeIcon = this.elem.querySelector(".card-number-wrapper .card-type-icon");
-    if (cardTypeIcon) {
-        cardTypeIcon.className = "card-type-icon show discover";
-    }
-
+    this.setCardTypeIcon("discover");
 };
 
 
@@ -907,10 +898,7 @@ CardJs.prototype.setCardTypeIconAsDiscover = function () {
  * Set the card type icon as - Diners
  */
 CardJs.prototype.setCardTypeIconAsDiners = function () {
-    const cardTypeIcon = this.elem.querySelector(".card-number-wrapper .card-type-icon");
-    if (cardTypeIcon) {
-        cardTypeIcon.className = "card-type-icon show diners";
-    }
+    this.setCardTypeIcon("diners");
 };
 
 
@@ -918,10 +906,7 @@ CardJs.prototype.setCardTypeIconAsDiners = function () {
  * Set the card type icon as - JCB
  */
 CardJs.prototype.setCardTypeIconAsJcb = function () {
-    const cardTypeIcon = this.elem.querySelector(".card-number-wrapper .card-type-icon");
-    if (cardTypeIcon) {
-        cardTypeIcon.className = "card-type-icon show jcb";
-    }
+    this.setCardTypeIcon("jcb");
 };
 
 
@@ -1071,7 +1056,7 @@ CardJs.prototype.initNameInput = function () {
  * Initialise the expiry month input
  */
 CardJs.prototype.initExpiryMonthInput = function () {
-    this.expiryMonthInput = CardJs.detachOrCreateElement(this.elem, ".expiry-month", "<input class='expiry-month' />");    
+    this.expiryMonthInput = CardJs.detachOrCreateElement(this.elem, ".expiry-month", "<input class='expiry-month' />");
 };
 
 
@@ -1087,7 +1072,7 @@ CardJs.prototype.initExpiryYearInput = function () {
  * Initialise the card CVC input
  */
 CardJs.prototype.initCvcInput = function () {
-    // Ensure detachOrCreateElement is refactored to vanilla JS before using
+
     this.cvcInput = CardJs.detachOrCreateElement(this.elem, ".cvc", "<input class='cvc' />");
 
     // Ensure the CVC has a placeholder
@@ -1141,7 +1126,7 @@ CardJs.prototype.setupCardNumberInput = function () {
 
 
 CardJs.prototype.setupNameInput = function () {
-    
+
     if (this.captureName) {
 
         const nameWrapper = document.createElement('div');
@@ -1159,8 +1144,8 @@ CardJs.prototype.setupNameInput = function () {
 };
 
 
-CardJs.prototype.setupExpiryInput = function() {
-    
+CardJs.prototype.setupExpiryInput = function () {
+
     let expiryContainer = document.createElement('div');
     expiryContainer.className = 'expiry-container';
     this.elem.appendChild(expiryContainer);
@@ -1238,14 +1223,14 @@ CardJs.prototype.setupExpiryInput = function() {
 
             var val = this.expiryMonthYearInput.value;
 
-            if(val.length == 1 && parseInt(val) > 1 && CardJs.keyIsNumber(e)) {
+            if (val.length == 1 && parseInt(val) > 1 && CardJs.keyIsNumber(e)) {
                 this.expiryMonthYearInput.value = CardJs.applyFormatMask("0" + val, CardJs.EXPIRY_MASK);
-              }
-        
-              if(!this.EXPIRY_USE_DROPDOWNS && this.expiryMonthYearInput != null) {
+            }
+
+            if (!this.EXPIRY_USE_DROPDOWNS && this.expiryMonthYearInput != null) {
                 this.expiryMonthInput.value = this.expiryMonth();
-                this.expiryYearInput.value = (val.length == 7 ? val.substr(5,2) : null);
-              }
+                this.expiryYearInput.value = (val.length == 7 ? val.substr(5, 2) : null);
+            }
 
         });
 
@@ -1287,8 +1272,6 @@ CardJs.prototype.setupCvcInput = function () {
     wrapper.className = 'cvc-wrapper';
 
     cvcContainer.appendChild(wrapper);
-
-    // Assuming this.cvcInput is already a DOM element
     wrapper.appendChild(this.cvcInput);
 
     const iconDiv = document.createElement('div');
@@ -1346,6 +1329,14 @@ CardJs.prototype.setExpiryMonthAsInvalid = function () {
             parentElement.classList.add("has-error");
         }
     }
+};
+
+CardJs.prototype.isValid = function () {    
+    
+    return CardJs.luhnCheck( CardJs.numbersOnlyString(this.cardNumberInput.value) ) &&
+           CardJs.isExpiryValid( this.getExpiryMonth(), this.getExpiryYear() ) &&
+           this.cvcInput.maxLength == CardJs.numbersOnlyString(this.cvcInput.value).length;
+
 };
 
 
@@ -1422,4 +1413,24 @@ CardJs.isExpiryValid = function (month, year) {
 
     return CardJs.isValidMonth(month)
         && ((year > currentYear) || (year == currentYear && month >= currentMonth));
+};
+
+CardJs.luhnCheck = function (card) {
+
+    var sum = 0;
+    var shouldDouble = false;
+    for (var i = card.length - 1; i >= 0; i--) {
+        var digit = parseInt(card.charAt(i), 10);
+        if (shouldDouble) {
+            digit *= 2;
+            if (digit > 9) {
+                digit -= 9;
+            }
+        }
+        sum += digit;
+        shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
+
+
 };

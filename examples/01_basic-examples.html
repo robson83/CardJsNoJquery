@@ -17,18 +17,29 @@
   <!-- Add Name -->
   <div style="margin-top: 50px">
     <div id="card1" class="card-js" data-capture-name="true"></div>
+    <button class="btn" id="_btn1">Validate</button>
   </div>
 
 
   <!-- Change Icon Color -->
   <div style="margin-top: 50px">
     <div id="card2" class="card-js" data-capture-name="true" data-icon-colour="#158CBA"></div>
+    <button class="btn" id="_btn2">Validate</button>
   </div>
 
   <script>
-     document.addEventListener('DOMContentLoaded', function() {
-         new CardJs('#card1');
-         new CardJs('#card2');
+    var a1, a2;
+     document.addEventListener('DOMContentLoaded', () => {
+         a1 = new CardJs('#card1');
+         a2 = new CardJs('#card2');
+     });
+
+     document.querySelectorAll("button.btn")[0].addEventListener('click', (e) => {
+        alert('Validation result: ' + a1.isValid());
+     });
+
+     document.querySelectorAll("button.btn")[1].addEventListener('click', (e) => {
+      alert('Validation result: ' + a2.isValid());
      });
  </script>
 
